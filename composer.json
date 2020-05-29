@@ -27,6 +27,12 @@
             "module": "Laminas\\Mvc"
         }
     },
+    "repositories": {
+        "weierophinney": {
+            "type": "vcs",
+            "url": "https://github.com/weierophinney/laminas-cli.git"
+        }
+    },
     "require": {
         "php": "^7.1",
         "container-interop/container-interop": "^1.2",

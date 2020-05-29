@@ -12,8 +12,8 @@ namespace Laminas\Mvc\Command;
 
 use DirectoryIterator;
 use InvalidArgumentException;
-use Laminas\Cli\Input\InputParam;
-use Laminas\Cli\Input\InputParamTrait;
+use Laminas\Cli\Command\InputParamTrait;
+use Laminas\Cli\Input;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,34 +38,29 @@ final class CreateModuleCommand extends Command
         $this->setDescription('Creates new MVC Module');
 
         $this->addParam(
-            'dir',
-            'Directory with modules',
-            InputParam::TYPE_PATH,
-            true,
-            'module',
-            [
-                'type' => 'dir',
-                'existing' => true,
-                // 'writable' => true, // @todo not supported yet
-            ]
+            (new Input\PathParam('dir'))
+                ->setDescription('Directory with modules')
+                ->setRequiredFlag(true)
+                ->setDescription('module')
+                ->setPathType(Input\PathParam::TYPE_DIR)
+                ->pathMustExist(true)
         );
 
         $this->addParam(
-            'name',
-            'New module name',
-            InputParam::TYPE_STRING,
-            true,
-            null,
-            [
-                'pattern' => '/^[A-Z][a-zA-Z0-9]*$/',
-            ]
+            (new Input\StringParam('name'))
+                ->setDescription('New module name')
+                ->setRequiredFlag(true)
+                ->setPattern('/^[A-Z][a-zA-Z0-9]*$/')
         );
     }
 
+    /**
+     * @param Input\ParamAwareInput $input
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $dir = $this->getParam('dir');
-        $name = $this->getParam('name');
+        $dir = $input->getParam('dir');
+        $name = $input->getParam('name');
 
         $path = $dir . DIRECTORY_SEPARATOR . $name;
         if (is_dir($path)) {
