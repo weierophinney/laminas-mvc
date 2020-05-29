@@ -41,7 +41,6 @@ final class CreateModuleCommand extends Command
             (new Input\PathParam('dir'))
                 ->setDescription('Directory with modules')
                 ->setRequiredFlag(true)
-                ->setDescription('module')
                 ->setPathType(Input\PathParam::TYPE_DIR)
                 ->pathMustExist(true)
         );
